@@ -1,132 +1,256 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Happy Valentine’s Day ❤️</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Just One Question ??</title>
 
 <style>
-    * {
-        box-sizing: border-box;
-        font-family: 'Segoe UI', sans-serif;
-    }
+  body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(135deg, #ff758c, #ff7eb3, #ff9a9e, #fad0c4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    color: white;
+    overflow: hidden;
+  }
 
-    body {
-        margin: 0;
-        height: 100vh;
-        background: linear-gradient(135deg, #ff758c, #ff7eb3);
-        overflow: hidden;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: white;
-    }
+  .box {
+    text-align: center;
+    padding: 40px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    animation: fadeIn 1s ease;
+    z-index: 10; /* above hearts */
+    position: relative;
+    display: flex;  
+     align-items: center
+  }
 
-    .card {
-        text-align: center;
-        padding: 40px;
-        background: rgba(255, 255, 255, 0.15);
-        border-radius: 20px;
-        backdrop-filter: blur(10px);
-        animation: popIn 1.2s ease;
-        box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-    }
+  h1 {
+    font-size: 2.2em;
+    margin-bottom: 30px;
+  }
 
-    h1 {
-        font-size: 3em;
-        margin-bottom: 10px;
-        animation: glow 2s infinite alternate;
-    }
+  button {
+    padding: 14px 30px;
+    font-size: 1em;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    margin: 0 10px;
+    transition: transform 0.2s;
+  }
 
-    p {
-        font-size: 1.3em;
-        margin-bottom: 30px;
-    }
+  button:hover {
+    transform: scale(1.1);
+  }
 
-    button {
-        padding: 15px 30px;
-        font-size: 1em;
-        border: none;
-        border-radius: 50px;
-        cursor: pointer;
-        background: #fff;
-        color: #ff4d6d;
-        transition: transform 0.2s, box-shadow 0.2s;
-    }
+  .yes {
+    background: white;
+    color: #ff4d6d;
+  }
 
-    button:hover {
-        transform: scale(1.1);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-    }
+  .no {
+    background: rgba(255,255,255,0.3);
+    color: white;
+  }
 
-    /* Floating hearts */
-    .heart {
-        position: absolute;
-        bottom: -20px;
-        color: rgba(255,255,255,0.8);
-        font-size: 20px;
-        animation: floatUp 6s linear infinite;
-    }
+  /* POPUP */
+  .popup {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 1000;
+  }
 
-    @keyframes floatUp {
-        0% {
-            transform: translateY(0) scale(1);
-            opacity: 1;
+  .popup.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .popup-content {
+    background: white;
+    color: #ff4d6d;
+    padding: 30px 40px;
+    border-radius: 20px;
+    text-align: center;
+    animation: pop 0.4s ease;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  }
+
+  .popup-content h2 {
+    margin-top: 0;
+  }
+
+  .popup-content button {
+    margin-top: 20px;
+    padding: 12px 28px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    background: #ff4d6d;
+    color: white;
+    font-size: 1em;
+  }
+
+  /* Floating hearts */
+  .heart {
+    position: fixed;
+    width: 30px;
+    height: 30px;
+    background: url('pic/heart.png') no-repeat center center;
+    background-size: contain;
+    animation: floatUp linear infinite;
+    pointer-events: none;
+    z-index: 1; /* behind box */
+  }
+
+  @keyframes floatUp {
+    0% { transform: translateY(100vh) scale(0.5); opacity: 0.8; }
+    100% { transform: translateY(-50px) scale(1); opacity: 0; }
+  }
+
+  @keyframes pop {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  @media (max-width: 600px) {
+      body {
+          margin: 0;
+          height: 100vh;
+          background: linear-gradient(135deg, #ff758c, #ff7eb3, #ff9a9e, #fad0c4);
+          display: flex;
+          justify-content: center;
+          align-items: flex-start;
+          font-family: Arial, sans-serif;
+          color: white;
+          overflow: hidden;
         }
-        100% {
-            transform: translateY(-110vh) scale(1.5);
-            opacity: 0;
-        }
+    .box {
+
+
+      margin-top: 25vh;
+      padding: 10px;
+ 
     }
 
-    @keyframes glow {
-        from {
-            text-shadow: 0 0 10px #fff, 0 0 20px #ff4d6d;
-        }
-        to {
-            text-shadow: 0 0 20px #fff, 0 0 40px #ff4d6d;
-        }
+    .box img.flower {
+      width: 170px;
+      height: auto;
+      margin-bottom: 15px;
+      background-color: rgba(0, 255, 255, 0);
+      z-index: 9999;
+      margin-right: -50px;
     }
 
-    @keyframes popIn {
-        0% {
-            transform: scale(0);
-            opacity: 0;
-        }
-        100% {
-            transform: scale(1);
-            opacity: 1;
-        }
+    .question h1 {
+      font-size: 1.5em;
+      margin-bottom: 15px;
     }
+
+    .question button {
+      padding: 10px 22px;
+      font-size: 0.9em;
+      margin: 5px 5px;
+    }
+  }
+  body {
+  opacity: 0;
+  transform: scale(0.98);
+  animation: pageFadeIn 3s ease forwards; /* slower, smooth */
+}
+
+@keyframes pageFadeIn {
+  from { opacity: 0; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Optional: fade in main box after body */
+.box {
+  opacity: 0;
+  animation: boxFadeIn 3s ease forwards;
+  animation-delay: 0.5s; /* delay to start after body fades in */
+}
+
+@keyframes boxFadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 </style>
 </head>
 
 <body>
 
-<div class="card">
-    <h1>Happy Valentine’s Day ❤️</h1>
-    <p>You make my world brighter every day.</p>
-    <button onclick="alert('💖 You are loved 💖')">Click for Love</button>
+<div class="box">
+  <img src="pic/flower.gif" alt="flower" class="flower">
+  <div class="question">
+    <h1>ARE YOU REIGNY VASTI GUIEB?</h1>
+    <button class="yes" onclick="goYes()">YES ?</button>
+    <button class="no" onclick="goNo()">NO ?</button>
+  </div>
+</div>
+
+<!-- POPUP -->
+<div id="popup" class="popup">
+  <div class="popup-content">
+    <h2>Oops ??</h2>
+    <p>This page is only for <strong>Reigny</strong> ??</p>
+    <button onclick="closePopup()">Okay ??</button>
+  </div>
 </div>
 
 <script>
-    function createHeart() {
-        const heart = document.createElement("div");
-        heart.classList.add("heart");
-        heart.innerHTML = "❤️";
-        heart.style.left = Math.random() * 100 + "vw";
-        heart.style.animationDuration = (Math.random() * 3 + 4) + "s";
-        heart.style.fontSize = (Math.random() * 20 + 15) + "px";
-        document.body.appendChild(heart);
+  function goYes() {
+    window.location.href = "catch.html";
+  }
 
-        setTimeout(() => {
-            heart.remove();
-        }, 7000);
-    }
+  function goNo() {
+    document.getElementById("popup").classList.add("show");
+  }
 
-    setInterval(createHeart, 300);
+  function closePopup() {
+    document.getElementById("popup").classList.remove("show");
+  }
+
+  // Floating hearts
+
+  // Floating hearts
+  function createHeart() {
+    const heart = document.createElement('div');
+    heart.className = 'heart';
+    heart.style.left = Math.random() * window.innerWidth + 'px';
+    heart.style.width = heart.style.height = (20 + Math.random()*20) + 'px';
+    heart.style.animationDuration = (4 + Math.random()*3) + 's'; // speed up
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 7000); // remove after animation
+  }
+
+  // Create first heart immediately
+  createHeart();
+
+  // Then continue creating hearts every 200ms
+  setInterval(createHeart, 200);
+
+
+
+  setInterval(createHeart, 200); // hearts appear faster
 </script>
 
 </body>
 </html>
-
