@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valentine's Multi-Frame Animation 💖</title>
+
+<style>
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    gap: 40px;
+    padding: 20px;
+    background: linear-gradient(135deg, #ff758c, #ff7eb3, #ff9a9e, #fad0c4);
+    font-family: Arial, sans-serif;
+  }
+
+  .animation-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .frame-container {
+    width: 250px;
+    height: 250px;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .frame-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .controlBtn {
+    padding: 8px 18px;
+    border: none;
+    border-radius: 25px;
+    background: white;
+    color: #ff4d6d;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  }
+
+  .controlBtn:hover {
+    background: #ffe6ec;
+  }
+
+  /* Floating hearts */
+  .heart {
+    position: fixed;
+    width: 30px;
+    height: 30px;
+    background: url('pic/heart.png') no-repeat center center;
+    background-size: contain;
+    animation: floatUp linear infinite;
+    pointer-events: none;
+  }
+
+  @keyframes floatUp {
+    0% { transform: translateY(100vh) scale(0.5); opacity: 0.8; }
+    100% { transform: translateY(-50px) scale(1); opacity: 0; }
+  }
+  .page-title {
+    margin-top: 5vh;
+  width: 100%;
+  text-align: center;
+  font-size: 2.5rem;
+  color: white;
+
+  text-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  letter-spacing: 2px;
+}
+.backBtn {
+  position: fixed;       /* make it stay on top */
+  top: 10px;             /* distance from top */
+  left: 20px;            /* distance from left */
+  padding: 10px 22px;
+  border: none;
+  border-radius: 25px;
+  background: white;
+  color: #ff4d6d;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  z-index: 9999;         /* stay above other elements */
+}
+
+.backBtn:hover {
+  background: #ffe6ec;
+}
+
+
+/* Mobile responsive */
+@media (max-width: 600px) {
+  .page-title {
+    font-size: 1.8rem;
+  }
+  
+}
+body {
+  opacity: 0;
+  transform: scale(0.98);
+  animation: pageFadeIn 3s ease forwards; /* slower, smooth */
+}
+
+@keyframes pageFadeIn {
+  from { opacity: 0; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Optional: fade in main elements slightly delayed */
+.page-title, .animation-box, .backBtn {
+  opacity: 0;
+  animation: elementFadeIn 3s ease forwards;
+}
+
+.page-title { animation-delay: 0.5s; }
+.animation-box { animation-delay: 0.8s; }
+.backBtn { animation-delay: 1s; }
+
+@keyframes elementFadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+</style>
+</head>
+
+<body>
+<h1 class="page-title">Arvi Emoticons</h1>
+<button class="backBtn" onclick="goBack()">⬅ Back to Game</button>
+
+<!-- Animation 1 -->
+<div class="animation-box">
+  <div class="frame-container">
+    <img src="pic/person1.png"
+         class="frameImage"
+         data-frames="pic/person1.png,pic/person22.png,pic/person33.png">
+  </div>
+  <button class="controlBtn">Pause</button>
+</div>
+
+<!-- Animation 2 -->
+<div class="animation-box">
+  <div class="frame-container">
+    <img src="pic/kiss1.png"
+         class="frameImage"
+         data-frames="pic/kiss1.png,pic/kiss2.png,pic/kiss3.png">
+  </div>
+  <button class="controlBtn">Pause</button>
+</div>
+
+<!-- Animation 3 -->
+<div class="animation-box">
+  <div class="frame-container">
+    <img src="pic/annoy1.png"
+         class="frameImage"
+         data-frames="pic/annoy1.png,pic/annoy2.png,pic/annoy3.png,pic/annoy4.png">
+  </div>
+  <button class="controlBtn">Pause</button>
+</div>
+
+<!-- Animation 4 -->
+<div class="animation-box">
+  <div class="frame-container">
+    <img src="pic/tear1.png"
+         class="frameImage"
+         data-frames="pic/annoy1.png,pic/tear1.png,pic/tear2.png,pic/tear3.png">
+  </div>
+  <button class="controlBtn">Pause</button>
+</div>
+
+<script>
+  document.querySelectorAll('.animation-box').forEach(box => {
+
+    const img = box.querySelector('.frameImage');
+    const button = box.querySelector('.controlBtn');
+
+    const frames = img.dataset.frames.split(',');
+    let index = 0;
+    let interval = null;
+    let isPlaying = false; // 🔥 default paused
+
+    function startAnimation() {
+      interval = setInterval(() => {
+        index = (index + 1) % frames.length;
+        img.src = frames[index];
+      }, 700);
+    }
+
+    function stopAnimation() {
+      clearInterval(interval);
+      interval = null;
+    }
+
+    button.textContent = "Play"; // 🔥 default button text
+
+    button.addEventListener('click', () => {
+      if (isPlaying) {
+        stopAnimation();
+        button.textContent = "Play";
+      } else {
+        startAnimation();
+        button.textContent = "Pause";
+      }
+      isPlaying = !isPlaying;
+    });
+
+  });
+
+  // Floating hearts
+  function createHeart() {
+    const heart = document.createElement('div');
+    heart.className = 'heart';
+    heart.style.left = Math.random() * window.innerWidth + 'px';
+    heart.style.width = heart.style.height = (20 + Math.random()*20) + 'px';
+    heart.style.animationDuration = (5 + Math.random()*5) + 's';
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 10000);
+  }
+
+  setInterval(createHeart, 500);
+  function goBack() {
+  window.location.href = "catch.html";
+}
+    function goBack() {
+  window.location.href = "catch.html";
+}
+</script>
+
+
+</body>
+</html>

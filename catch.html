@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valentine Catch Game ❤️</title>
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  background: linear-gradient(270deg, #ff758c, #ff7eb3, #ff9a9e, #fad0c4);
+  background-size: 800% 800%;
+  animation: gradientMove 12s ease infinite;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+  color: white;
+  position: relative; 
+}
+
+@keyframes gradientMove {
+  0% { background-position:0% 50%; }
+  50% { background-position:100% 50%; }
+  100% { background-position:0% 50%; }
+}
+
+h1 {
+  text-align: center;
+  margin: 10px 0 5px;
+  font-weight: 400;
+  font-size: 30px;
+  
+}
+
+
+
+h1 {
+  color: white;
+  animation: whiteRed 5s infinite;
+}
+
+@keyframes whiteRed {
+  0% {
+    color: white;
+  }
+
+  30% {      /* stays white longer */
+    color: rgba(255, 255, 255, 0.247);
+  }
+    70% {      /* stays white longer */
+    color: rgba(255, 255, 255, 0.87);
+  }
+
+  100% {
+    color: #ffffff;
+  }
+}
+
+
+
+
+.score-board {
+  display: flex;
+  justify-content:center;
+  gap:30px;
+  font-size:1.3em;
+  margin-bottom:10px;
+}
+
+.falling {
+  position:absolute;
+  pointer-events:none;
+}
+
+#movable-area {
+  position:absolute;
+  left:0;
+  width:100%;
+  height:150px;
+  bottom:50px;
+  background: rgba(255,255,255,0.2);
+}
+
+#person {
+  position:absolute;
+  width:110px;
+  cursor:grab;
+  user-select:none;
+}
+
+.bg-heart {
+  position:absolute;
+  opacity:0.25;
+  animation:floatUp linear infinite;
+  pointer-events:none;
+}
+
+@keyframes floatUp {
+  from { transform: translateY(100vh); }
+  to { transform: translateY(-120px); }
+}
+
+.bounce {
+  animation: bounce 0.4s infinite alternate;
+}
+
+@keyframes bounce {
+  from { transform: translateY(0); }
+  to { transform: translateY(-6px); }
+}
+
+.pulse {
+  animation: pulse 0.3s ease;
+}
+
+@keyframes pulse {
+  0% { box-shadow: inset 0 0 0 rgba(255,255,255,0); }
+  50% { box-shadow: inset 0 0 40px rgba(255,255,255,0.3); }
+  100% { box-shadow: inset 0 0 0 rgba(255,255,255,0); }
+}
+
+button {
+  display:block;
+  margin:10px auto;
+  padding:10px 25px;
+  border:none;
+  border-radius:25px;
+  background:white;
+  color:#ff4d6d;
+  font-size:1em;
+  cursor:pointer;
+}
+
+/* Progress Bars */
+.bar-container {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  width:120px;
+  margin:0 10px;
+}
+
+.bar-label {
+  margin-bottom:5px;
+  font-size:0.9em;
+}
+
+.bar-bg {
+  width:100%;
+  height:15px;
+  background: rgba(255,255,255,0.2);
+  border-radius:10px;
+  overflow:hidden;
+  border:1px solid rgb(87,87,87);
+  box-sizing:border-box;
+}
+
+.bar-fill {
+  height:100%;
+  width:0%;
+  border-radius:10px;
+  transition: width 0.2s ease;
+}
+
+.red { background-color:#b80f2e; }       /* Hearts */
+.brown { background-color:#a74b09; }     /* Chocolates */
+.pink { background-color:#ff69b4; }      /* Flowers */
+
+/* Popups */
+.popup {
+  position: fixed;
+  top:0;
+  left:0;
+  width:100vw;
+  height:100vh;
+  background: rgba(0,0,0,0.5);
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 9999;
+  transition: opacity 0.3s ease;
+}
+
+.popup.show {
+  pointer-events: auto;
+  opacity: 1;
+}
+
+.popup-content {
+  background:white;
+  color:#333;
+  padding:30px 40px;
+  border-radius:15px;
+  text-align:center;
+  font-size:1.5em;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:20px;
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow:auto;
+}
+
+.popup-buttons {
+  display:flex;
+  justify-content:center;
+  gap:20px;
+}
+
+.popup-content button {
+  padding:10px 25px;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+  font-size:1em;
+}
+.backBtn {
+  position: fixed;       /* make it stay on top */
+  top: 10px;             /* distance from top */
+  left: 20px;            /* distance from left */
+  padding: 10px 22px;
+  border: none;
+  border-radius: 25px;
+  background: white;
+  color: #ff4d6d;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  z-index: 9999;         /* stay above other elements */
+}
+
+.backBtn:hover {
+  background: #ffe6ec;
+}
+
+#yesBtn { background-color:#b32525; color:white; }
+#noBtn  { background-color:#ff847c; color:white; }
+
+/* Responsive */
+@media (max-width: 600px) {
+  body {
+    overflow: hidden;
+    touch-action: none;
+  }
+  .backBtn {
+  position: fixed;       /* make it stay on top */
+  top:  0px;          /* distance from top */
+  left: 5px;            /* distance from left */ 
+font-weight: 300;
+font-size: 10px;
+  border: none;
+  border-radius: 25px;
+  background: white;
+  color: #ff4d6d;
+width: 40px;
+height: 30px;
+  cursor: pointer;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  z-index: 9999;         /* stay above other elements */
+  padding: 0;
+}
+
+.backBtn:hover {
+  background: #ffe6ec;
+}
+h1 {
+  text-align: center;
+  margin: 10px 0 5px;
+  font-weight: 400;
+  font-size: 15px;
+  
+}
+  #person { width: 80px; }
+  .bar-container { width: 90px; font-size: 1em; }
+  #movable-area { bottom: 120px; height: 150px; }
+
+  .bar-label {
+  margin-bottom:5px;
+  font-size:0.5em;
+}
+}
+#fadeOverlay {
+  position: fixed;
+  inset: 0;
+  background: #000000; /* or transparent if you just want fade from 0 opacity */
+  opacity: 1;
+  z-index: 9999;
+  pointer-events: none;
+  animation: fadeOut 5s forwards;
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+</style>
+</head>
+<body>
+  <div id="fadeOverlay"></div>
+<button class="backBtn" onclick="goBack()">⬅ Back</button>
+<h1>Drag your character to catch falling items<br>Fill the bar to unlock pages</h1>
+
+<div class="score-board">
+  <div class="bar-container">
+    <div class="bar-label">Hearts</div>
+    <div class="bar-bg"><div id="heartBar" class="bar-fill red"></div></div>
+  </div>
+  <div class="bar-container">
+    <div class="bar-label">Chocolates</div>
+    <div class="bar-bg"><div id="chocoBar" class="bar-fill brown"></div></div>
+  </div>
+  <div class="bar-container">
+    <div class="bar-label">Flowers</div>
+    <div class="bar-bg"><div id="flowerBar" class="bar-fill pink"></div></div>
+  </div>
+</div>
+
+<div id="movable-area"></div>
+<img id="person" src="pic/person1.png" alt="Person">
+<button onclick="restartGame()">Restart Game</button>
+<button id="pauseBtn" onclick="togglePause()">Pause</button>
+
+<!-- Popup -->
+<div id="popup" class="popup">
+  <div class="popup-content">
+    <div id="popupText">Page unlocked! Do you want to go?</div>
+    <div class="popup-buttons">
+      <button id="yesBtn">Yes</button>
+      <button id="noBtn" onclick="hidePopup()">No</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const person = document.getElementById('person');
+const frames = ['pic/person1.png','pic/person22.png','pic/person33.png'];
+let frameIndex = 0;
+
+// Animate person frames
+setInterval(() => { 
+  frameIndex = (frameIndex + 1) % frames.length; 
+  person.src = frames[frameIndex]; 
+}, 800);
+
+let heartScore = 0, chocoScore = 0, flowerScore = 0;
+let isDragging = false;
+const movableArea = document.getElementById('movable-area');
+const maxScore = 20; 
+let popupShown = { heart:false, choco:false, flower:false }; 
+
+// Drag events
+person.addEventListener('mousedown', () => { isDragging=true; person.classList.add('bounce'); });
+person.addEventListener('touchstart', e => { isDragging=true; person.classList.add('bounce'); e.preventDefault(); });
+document.addEventListener('mouseup', () => { isDragging=false; person.classList.remove('bounce'); });
+document.addEventListener('touchend', () => { isDragging=false; person.classList.remove('bounce'); });
+document.addEventListener('mousemove', e => { if(isDragging) movePerson(e.clientX,e.clientY); });
+document.addEventListener('touchmove', e => {
+  if(isDragging && e.touches.length>0){
+    movePerson(e.touches[0].clientX, e.touches[0].clientY);
+    e.preventDefault();
+  }
+});
+
+function getMovableLimits() {
+  const minY = movableArea.offsetTop;
+  const maxY = movableArea.offsetTop + movableArea.offsetHeight - person.offsetHeight;
+  return { minY, maxY };
+}
+
+function movePerson(x,y){
+  let newX = x - person.offsetWidth/2;
+  newX = Math.max(0, Math.min(window.innerWidth-person.offsetWidth,newX));
+  const {minY,maxY} = getMovableLimits();
+  let newY = y - person.offsetHeight/2;
+  newY = Math.max(minY, Math.min(maxY,newY));
+  person.style.left = newX+'px';
+  person.style.top = newY+'px';
+}
+
+function centerPerson() {
+  const { minY, maxY } = getMovableLimits();
+  person.style.left = window.innerWidth/2 - person.offsetWidth/2 + 'px';
+  person.style.top = minY + (maxY - minY)/2 + 'px';
+}
+centerPerson();
+window.addEventListener('resize', centerPerson);
+
+const items = [
+  { src:'pic/heart.png', type:'heart' },
+  { src:'pic/chocolate.png', type:'choco' },
+  { src:'pic/flower.png', type:'flower' }
+];
+
+function updateBars() {
+  document.getElementById('heartBar').style.width = Math.min(heartScore/maxScore*100,100)+'%';
+  document.getElementById('chocoBar').style.width = Math.min(chocoScore/maxScore*100,100)+'%';
+  document.getElementById('flowerBar').style.width = Math.min(flowerScore/maxScore*100,100)+'%';
+
+  if(heartScore>=maxScore && !popupShown.heart){ showPopup('heart'); popupShown.heart=true; }
+  if(chocoScore>=maxScore && !popupShown.choco){ showPopup('choco'); popupShown.choco=true; }
+  if(flowerScore>=maxScore && !popupShown.flower){ showPopup('flower'); popupShown.flower=true; }
+}
+
+let isPaused = false;
+function togglePause() {
+  isPaused = !isPaused;
+  document.getElementById('pauseBtn').textContent = isPaused ? 'Resume' : 'Pause';
+}
+
+function createItem() {
+  const data = items[Math.floor(Math.random() * items.length)];
+  const item = document.createElement('img');
+  item.src = data.src;
+  item.className = 'falling';
+  item.dataset.type = data.type;
+
+  const size = window.innerWidth <= 600 ? Math.random()*20+35 : Math.random()*30+60;
+  
+  
+  item.style.width = size+'px';
+  item.style.height = size+'px';
+  item.style.left = Math.random()*(window.innerWidth-size)+'px';
+  item.style.top = '0px';
+
+  document.body.appendChild(item);
+
+const speed = window.innerWidth <= 600 ? Math.random()*1 + 1 : Math.random()*2 + 2;
+const drift = window.innerWidth <= 600 ? Math.random()*0.5 - 0.25 : Math.random()*1 - 0.5;
+  
+
+  const fall = setInterval(()=>{
+    if(!isPaused){
+      let y = parseFloat(item.style.top);
+      let x = parseFloat(item.style.left);
+      y += speed;
+      x += drift;
+      item.style.top = y+'px';
+      item.style.left = x+'px';
+
+      const p = person.getBoundingClientRect();
+      const i = item.getBoundingClientRect();
+      if(!(i.right<p.left || i.left>p.right || i.bottom<p.top || i.top>p.bottom)){
+        if(item.dataset.type==='heart') heartScore++;
+        if(item.dataset.type==='choco') chocoScore++;
+        if(item.dataset.type==='flower') flowerScore++;
+        updateBars();
+        document.body.classList.add('pulse');
+        setTimeout(()=>document.body.classList.remove('pulse'),300);
+        item.remove();
+        clearInterval(fall);
+      }
+      if(y>window.innerHeight){ item.remove(); clearInterval(fall);}
+    }
+  },20);
+}
+
+setInterval(()=>{ if(!isPaused) createItem(); },700);
+
+// Background hearts
+function createBackgroundHeart(){
+  const heart = document.createElement('img');
+  heart.src='pic/heart.png';
+  heart.className='bg-heart';
+  const size=Math.random()*60+40;
+  heart.style.width=size+'px';
+  heart.style.left=Math.random()*window.innerWidth+'px';
+  heart.style.animationDuration=(Math.random()*10+10)+'s';
+  document.body.appendChild(heart);
+  setTimeout(()=>heart.remove(),20000);
+}
+setInterval(createBackgroundHeart,1200);
+
+// Popup
+const popup = document.getElementById('popup');
+const popupText = document.getElementById('popupText');
+const yesBtn = document.getElementById('yesBtn');
+
+function showPopup(type){
+  // Check if popup is already visible
+  if(popup.classList.contains('show')) return;
+
+  // Pause the game
+  isPaused = true;
+  document.getElementById('pauseBtn').textContent = 'Resume';
+
+  popupText.textContent = `${type.charAt(0).toUpperCase()+type.slice(1)} page unlocked! Go?`;
+  let page='';
+  if(type==='heart') page='heart.html';
+  if(type==='choco') page='choco.html';
+  if(type==='flower') page='flower.html';
+  yesBtn.onclick = ()=>{ window.location = page; };
+  popup.classList.add('show');
+}
+
+function hidePopup(){
+  popup.classList.remove('show');
+  // Resume the game when popup closes
+  isPaused = false;
+  document.getElementById('pauseBtn').textContent = 'Pause';
+}
+
+// Restart
+function restartGame(){
+  heartScore = chocoScore = flowerScore = 0;
+
+  // CLEAR STORAGE
+  localStorage.removeItem('heartScore');
+  localStorage.removeItem('chocoScore');
+  localStorage.removeItem('flowerScore');
+
+  updateBars();
+  popupShown = { heart:false, choco:false, flower:false };
+  hidePopup();
+  centerPerson();
+  document.querySelectorAll('.falling').forEach(item=>item.remove());
+}
+
+    function goBack() {
+  window.location.href = "index.html";
+}
+</script>
+
+</body>
+</html>

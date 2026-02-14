@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valentine's Envelope 💌</title>
+
+<style>
+
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  background: linear-gradient(135deg, #ff758c, #ff7eb3, #ff9a9e, #fad0c4);
+  font-family: Arial, sans-serif;
+  overflow: hidden;
+}
+
+.envelope-container {
+  margin-top: 20vh;
+  position: relative;
+  width: 600px;
+  height: 400px;
+  perspective: 1000px;
+  cursor: pointer;
+}
+
+.envelope {
+  font-size:1.8em;
+  font-family:'Dancing Script', cursive;
+  color:#2c2c2c;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 2s ease;
+}
+
+.flap,.letter{
+  position:absolute;
+  width:100%;
+  height:100%;
+  border-radius:10px;
+  backface-visibility:hidden;
+}
+
+.flap{
+  background:#ff4d6d;
+  transform-origin:top;
+  transition:3s;
+}
+
+.letter{
+  background:#ffeeee;
+  display:flex;
+  justify-content:center;
+  text-align: center;
+  font-size:.6em;
+  padding: 40px;
+  transform:rotateX(180deg);
+  font-family: 'Montserrat', Arial, sans-serif;
+  letter-spacing: 3px;
+  line-height: 1.3;
+}
+
+.letter .highlight {
+  font-size: 1.8em;
+  font-weight: 600;
+  color: #ff4d6d;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+  background-color: rgba(0, 0, 0, 0);
+  height: min-content;
+  margin-top: 20px;
+  margin-right: 50px;
+  background-color: #2c2c2c00;
+}
+
+.envelope.open{
+  transform:rotateX(180deg);
+}
+
+.envelope.open .flap{
+  transform:rotateX(180deg);
+  width: 680px;
+}
+
+.instruction {
+  position: absolute;
+  top: 80px;
+  text-align: center;
+  width: 100%;
+  color: white;
+  font-size: 1.2em;
+  text-shadow: 0 2px 5px rgba(0,0,0,0.4);
+}
+
+/* HEARTS */
+
+.heart {
+  position: fixed;
+  width: 20px;
+  height: 20px;
+  background: #ff1742;
+  transform: rotate(45deg);
+  animation: floatUp linear forwards;
+  z-index: 0;
+}
+
+.heart::before,
+.heart::after{
+  content:"";
+  position:absolute;
+  width:20px;
+  height:20px;
+  background:#ff1742;
+  border-radius:50%;
+}
+
+.heart::before{top:-10px;left:0;}
+.heart::after{left:-10px;top:0;}
+
+@keyframes floatUp {
+  from {
+    transform: translate(0,0) rotate(45deg);
+    opacity: 1;
+  }
+  to {
+    transform: translate(var(--drift), -120vh) rotate(45deg);
+    opacity: 0;
+  }
+}
+
+.inline-img {
+  width: 100px;
+  height:auto;
+  margin: 10px 0;
+}
+
+.below-greeting {
+  width: 50px;
+  height: 50px;
+  display: block;
+  margin: 10px auto;
+}
+
+.letter p {
+  background-color: #fad0c4;
+
+  margin-top: 20px;
+  font-size: 0.9em;
+  line-height: 1.5;
+  color: #333;
+}
+
+.scrapbook {
+  position: relative;
+  width: 250px;
+  height: 250px;
+  margin: 15px auto;
+  background-color: #54d35000;
+}
+
+.scrap-img {
+  position: absolute;
+  width: 90px;
+  height: auto;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  transition: transform 0.3s;
+  border: 1px solid #ffffff;
+}
+
+/* individual positions + rotations */
+
+.img1 { top: 0; left: 0; transform: rotate(-10deg); z-index: 3; }
+.img2 { top: 0px; left: 80px; transform: rotate(8deg); z-index: 2; }
+.img3 { top: 10px; left: 160px; transform: rotate(-5deg); z-index: 1; }
+.img4 { top: 100px; left: 0px; transform: rotate(3deg); z-index: 2; }
+.img5 { top: 110px; left: 80px; transform: rotate(-5deg); z-index: 1; }
+.img6 { top: 105px; left: 170px; transform: rotate(8deg); z-index: 1; }
+.img7 { top: 115px; left: 250px; transform: rotate(8deg); z-index: 0; }
+
+.scrap-img.clicked {
+  transform: scale(3) rotate(0deg);
+  z-index: 10;
+}
+
+@media (max-width: 768px) {
+html, body {
+  height: 100%;       /* full viewport height */
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;   /* allow vertical scrolling */
+  overflow-x: hidden; /* prevent horizontal scroll */
+}
+.envelope-container {
+  width: 90%;
+  height: 70%;
+  background-color: #ebdddd00;
+  margin-top: 12vh;
+  
+}
+
+.envelope {
+  font-size:1.8em;
+  font-family:'Dancing Script', cursive;
+  color:#2c2c2c;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 2s ease;
+  background-color: #1ca5aa00;
+}
+
+.flap{
+  background:#ff4d6d;
+  transform-origin:top;
+  transition:3s;
+  width: 100%;
+}
+
+.flap,.letter{
+  position:absolute;
+  width:100%;
+  height:100%;
+  border-radius:10px;
+  backface-visibility:hidden;
+}
+
+.letter {
+  flex-direction: column;
+  padding: 20px;
+  font-size: 0.8em;
+  letter-spacing: 1.5px;
+  line-height: 1.4;
+  max-width: 90%;
+  height: 90%;
+  background-color: #fff4f4;
+  justify-content:flex-start;
+}
+
+.envelope.open .flap{
+  transform:rotateX(180deg);
+  width: 100%;
+}
+
+.letter .highlight {
+  padding: 0;
+  background-color: #92101000;
+  font-size: 1.2em;
+  margin-right: 0;
+  text-align: center;
+  width: 100%;
+}
+
+.scrapbook {
+  position: relative;
+  width: 250px;
+  height: 25vh;
+  margin: 15px auto;
+  background-color: #44be0c00;
+}
+
+.scrap-img {
+  width: 70px;
+  height: auto;
+}
+
+.img1 { top: -10; left: 10px; }
+.img2 { top: 0; left: 75px; }
+.img3 { top: 5px; left: 145px; }
+.img4 { top: 95px; left: 0; }
+.img5 { top: 90px; left: 65px; }
+.img6 { top: 100px; left: 140px; }
+.img7 { top: 45px; left: 200px; }
+
+.instruction {
+  font-size: 1em;
+  top: 50px;
+}
+
+.letter p {
+  font-size: 0.6em;
+  line-height: 1.5;
+  color: #202020;
+  background-color: #fadede;
+  font-weight: 500;
+  text-align:center;
+  font-family: Arial;
+  letter-spacing: 0px;
+}
+
+}
+
+.backBtn {
+  position: fixed;
+  top: 10px;
+  left: 20px;
+  padding: 10px 22px;
+  border: none;
+  border-radius: 25px;
+  background: white;
+  color: #ff4d6d;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  z-index: 9999;
+}
+
+.backBtn:hover {
+  background: #ffe6ec;
+}
+.flower{
+  
+    background-color: #92101000;
+    width: 30vh;
+    height: auto;
+    z-index: 9999999;
+}
+/* Full page fade-in on load (slower) */
+body {
+  opacity: 0;
+  transform: scale(0.98);
+  animation: pageFadeIn 3s ease forwards; /* slower, 2 seconds */
+}
+
+@keyframes pageFadeIn {
+  from { opacity: 0; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Fade in main elements sequentially (slower) */
+.envelope-container, .instruction, .backBtn {
+  opacity: 0;
+  animation: elementFadeIn 3s ease forwards; /* slower, 1.5 seconds */
+}
+
+.instruction { animation-delay: 0.5s; }
+.envelope-container { animation-delay: 0.8s; }
+.backBtn { animation-delay: 3s; }
+
+@keyframes elementFadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+</style>
+</head>
+
+<body>
+
+<button class="backBtn" onclick="goBack()">⬅ Back to Game</button>
+
+<div class="instruction">
+Click the envelope to open or close it!</br>
+Touch the image to enlarge!
+</div>
+
+<div class="envelope-container">
+
+<div class="envelope" id="envelope">
+
+<div class="flap">  <img src="pic/flower.gif" alt="flower" class="flower"></div>
+
+<div class="letter">
+
+<span class="highlight">
+Happy Valentine's Day!<br>
+
+<div class="scrapbook">
+<img src="pic/r1.jpg" class="scrap-img img1">
+<img src="pic/r2.jpg" class="scrap-img img2">
+<img src="pic/r3.jpg" class="scrap-img img3">
+<img src="pic/r4.jpg" class="scrap-img img4">
+<img src="pic/r5.jpg" class="scrap-img img5">
+<img src="pic/r6.jpg" class="scrap-img img6">
+<img src="pic/r7.jpg" class="scrap-img img7">
+</div>
+
+</span>
+
+<div class="text-content">
+
+<p>
+Thank you amin nga itited mo love ko, uray sika la kadkadwak, amin nga maubra nga kadwa ka ket nagmayat.
+Sapay kuma ta kastuy ta latta kanayon, dika maumuma kuma pls.
+Naghappy nak nu kadwaka kada makitkita ka.Ubraek amin para kenka.
+<span style="font-style: italic; color: #921010;">Ilove youu!!</span>
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+const envelope=document.getElementById("envelope");
+let heartsStarted=false;
+
+envelope.addEventListener("click",()=>{
+
+envelope.classList.toggle("open");
+
+if(!heartsStarted){
+heartsStarted=true;
+setInterval(createHeart,400);
+}
+
+});
+
+function createHeart(){
+
+const heart = document.createElement("div");
+heart.className = "heart";
+
+const center = window.innerWidth / 2;
+
+heart.style.left = center + "px";
+heart.style.bottom = "-30px";
+heart.style.top = "auto";
+
+const drift = (Math.random() - 0.5) * 3000;
+heart.style.setProperty("--drift", drift + "px");
+
+heart.style.animationDuration = (6 + Math.random()*6) + "s";
+heart.style.transform = `scale(${0.5 + Math.random()}) rotate(45deg)`;
+
+document.body.appendChild(heart);
+
+setTimeout(() => heart.remove(), 8000);
+
+}
+
+function goBack() {
+window.location.href = "catch.html";
+}
+
+const scrapImages = document.querySelectorAll('.scrap-img');
+
+scrapImages.forEach(img => {
+  img.addEventListener('click', (event) => {
+    // stop the click from reaching the envelope
+    event.stopPropagation();
+    // toggle the clicked class
+    img.classList.toggle('clicked');
+  });
+});
+
+</script>
+
+</body>
+</html>
